@@ -1,10 +1,11 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Duke {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String[] todo = new String[100];
         int counter = 0;
+        ArrayList<Task> tasks = new ArrayList<Task>();
         String logo = " ____        _        \n"
                     + "|  _ \\ _   _| | _____ \n"
                     + "| | | | | | | |/ / _ \\\n"
@@ -13,19 +14,25 @@ public class Duke {
         System.out.println("Hello from\n" + logo);
         System.out.println("Hello! I'm Duke\nWhat can I do for you?");
         while (true) {
-            String task = sc.nextLine();
-            if (task.equals("bye")) {
+            String input = sc.nextLine();
+            if (input.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 break;
-            } else if (task.equals("list")) {
-                for (int i = 0; i < todo.length; i++) {
-                    if (todo[i] != null) {
-                        System.out.println(i + 1 + ". " + todo[i]);
-                    }
+            } else if (input.equals("list")) {
+                for (int i = 0; i < tasks.size(); i++) {
+                    String icon = tasks.get(i).getStatusIcon();
+                    String tempName = tasks.get(i).description;
+                    System.out.println(i + 1 + ".[" + icon + "] " + tempName);
                 }
+            } else if (input.length() > 3 && input.substring(0, 4).equals("done")) {
+                String temp = input.substring(5);
+                int temp2 = Integer.parseInt(temp) - 1;
+                tasks.get(temp2).markAsDone();
+                System.out.println("Nice! I've marked this task as done:\n[\u2713] " + tasks.get(temp2).description);
             } else {
-                todo[counter] = task;
-                System.out.println("added: " + task);
+                Task temp = new Task(input);
+                tasks.add(temp);
+                System.out.println("added: " + tasks.get(counter).description);
                 counter++;
             }
         }
