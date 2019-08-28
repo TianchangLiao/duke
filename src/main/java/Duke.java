@@ -2,6 +2,45 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Duke {
+
+    static ArrayList<Task> addToList(int counter, String input,
+                                     ArrayList<Task> tasks) {
+        int count = counter + 1;
+        String[] input2 = input.split(" ", 2);
+        String first = input2[0];
+        String second = input2[1];
+        if (first.equals("todo")) {
+            ToDo temp = new ToDo(second);
+            tasks.add(temp);
+            System.out.println("Got it. I've added this task:\n"
+                    + temp.toString() + "\nNow you have " + count
+                    + " in the list.");
+        } else if (first.equals("done")) {
+            int temp = Integer.parseInt(second) - 1;
+            tasks.get(temp).markAsDone();
+            System.out.println("Nice! I've marked this task as done:\n"
+                    + tasks.get(temp).toString());
+        } else {
+            String[] input3 = second.split("/", 2);
+            String task = input3[0];
+            String date = input3[1].substring(3);
+            if (first.equals("deadline")) {
+                Deadline deadline = new Deadline(task, date);
+                tasks.add(deadline);
+                System.out.println("Got it. I've added this task:\n"
+                        + deadline.toString() + "\nNow you have " + count
+                        + " in the list.");
+            } else if (first.equals("event")) {
+                Event event = new Event(task, date);
+                tasks.add(event);
+                System.out.println("Got it. I've added this task:\n"
+                        + event.toString() + "\nNow you have " + count
+                        + " in the list.");
+            }
+        }
+        return tasks;
+    }
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int counter = 0;
@@ -20,19 +59,10 @@ public class Duke {
                 break;
             } else if (input.equals("list")) {
                 for (int i = 0; i < tasks.size(); i++) {
-                    String icon = tasks.get(i).getStatusIcon();
-                    String tempName = tasks.get(i).description;
-                    System.out.println(i + 1 + ".[" + icon + "] " + tempName);
+                    System.out.println(i + 1 + tasks.get(i).toString());
                 }
-            } else if (input.length() > 3 && input.substring(0, 4).equals("done")) {
-                String temp = input.substring(5);
-                int temp2 = Integer.parseInt(temp) - 1;
-                tasks.get(temp2).markAsDone();
-                System.out.println("Nice! I've marked this task as done:\n[\u2713] " + tasks.get(temp2).description);
             } else {
-                Task temp = new Task(input);
-                tasks.add(temp);
-                System.out.println("added: " + tasks.get(counter).description);
+                addToList(counter, input, tasks);
                 counter++;
             }
         }
