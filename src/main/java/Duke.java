@@ -1,11 +1,56 @@
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Duke {
 
     private static ArrayList<Task> tasks = new ArrayList<Task>();
+    private static Path file = Paths.get("/Users/tianchang/Downloads/CS2113T/duke/data/duke.txt");
 
-    static void addToList(String input) throws DukeException {
+    private static void writeToFile() throws IOException {
+        int l = tasks.size();
+        String[] text = new String[l];
+        for (int i = 0; i < l; i++) {
+            text[i] = tasks.get(i).toString();
+        }
+        List<String> lines = Arrays.asList(text);
+        Files.write(file, lines, StandardCharsets.UTF_8);
+    }
+
+    private static void readFile() throws IOException {
+        File file = new File("/Users/tianchang/Downloads/CS2113T/duke/data/duke.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line, description;
+        while ((line = br.readLine()) != null) {
+            int startindex = line.lastIndexOf("]") + 2;
+            int endindex = line.lastIndexOf("(") - 1;
+            Task temp = null;
+            if (line.contains("[T]")) {
+                description = line.substring(startindex);
+                temp = new ToDo(description);
+            } else if (line.contains("[D]")) {
+                description = line.substring(startindex, endindex);
+                String by = line.substring(line.lastIndexOf("(by:") + 5, line.lastIndexOf(")"));
+                temp = new Deadline(description, by);
+            } else if (line.contains("[E]")) {
+                description = line.substring(startindex, endindex);
+                String at = line.substring(line.lastIndexOf("(at:") + 5, line.lastIndexOf(")"));
+                temp = new Event(description, at);
+            }
+            if (temp != null && line.contains("\u2713")) {
+                temp.markAsDone();
+            }
+            tasks.add(temp);
+        }
+    }
+
+    private static void addToList(String input) throws DukeException {
         String[] input2 = input.split(" ", 2);
         String first = input2[0];
         String second = null;
@@ -28,7 +73,7 @@ public class Duke {
                         + tasks.get(temp).toString());
             } else {
                 String[] input3 = second.split("/", 2);
-                String task = input3[0];
+                String task = input3[0].trim();
                 String date = input3[1].substring(3);
                 if (first.equals("deadline")) {
                     Deadline deadline = new Deadline(task, date);
@@ -49,12 +94,20 @@ public class Duke {
         }
     }
 
-    public static void receiveInputs() {
+    private static void receiveInputs() {
+        try {
+            readFile();
+        } catch (FileNotFoundException e) {
+            System.out.println("\nOOPS!!! No save file found. One will be created after you go!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         while (true) {
             try {
                 Scanner sc = new Scanner(System.in);
                 String input = sc.nextLine();
                 if (input.equals("bye")) {
+                    writeToFile();
                     System.out.println("Bye. Hope to see you again soon!");
                     break;
                 } else if (input.equals("list")) {
@@ -64,11 +117,13 @@ public class Duke {
                 } else {
                     addToList(input);
                 }
-            } catch (DukeException e) {
+            } catch (DukeException | IOException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
+
+
 
     public static void main(String[] args) {
         String logo = " ____        _        \n"
