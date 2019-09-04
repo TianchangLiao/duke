@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class Duke {
 
     private static ArrayList<Task> tasks = new ArrayList<Task>();
-    private static Path file = Paths.get("/Users/tianchang/Downloads/CS2113T/duke/data/duke.txt");
 
     private static void writeToFile() throws IOException {
         int l = tasks.size();
@@ -19,12 +18,13 @@ public class Duke {
         for (int i = 0; i < l; i++) {
             text[i] = tasks.get(i).toString();
         }
+        Path file = Paths.get("data/duke.txt");
         List<String> lines = Arrays.asList(text);
         Files.write(file, lines, StandardCharsets.UTF_8);
     }
 
     private static void readFile() throws IOException {
-        File file = new File("/Users/tianchang/Downloads/CS2113T/duke/data/duke.txt");
+        File file = new File("data/duke.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line, description;
         while ((line = br.readLine()) != null) {
