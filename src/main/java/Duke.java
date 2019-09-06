@@ -1,12 +1,8 @@
-import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-import java.util.ArrayList;
+import java.nio.file.*;
+import java.io.*;
+import java.text.ParseException;
+import java.util.*;
 
 public class Duke {
 
@@ -23,7 +19,7 @@ public class Duke {
         Files.write(file, lines, StandardCharsets.UTF_8);
     }
 
-    private static void readFile() throws IOException {
+    private static void readFile() throws IOException, ParseException {
         File file = new File("data/duke.txt");
         BufferedReader br = new BufferedReader(new FileReader(file));
         String line, description;
@@ -101,6 +97,8 @@ public class Duke {
             System.out.println("\nOOPS!!! No save file found. One will be created after you go!");
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ParseException e) {
+            System.out.println("OOPS!!! The data in the save file is formatted incorrectly!");
         }
         while (true) {
             try {
@@ -122,8 +120,6 @@ public class Duke {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         String logo = " ____        _        \n"
