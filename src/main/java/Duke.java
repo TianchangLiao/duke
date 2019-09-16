@@ -73,16 +73,6 @@ public class Duke {
                         + tasks.get(temp).toString() + "\nNow you have " + (tasks.size() - 1)
                         + " in the list.");
                 tasks.remove(temp);
-            } else if (first.equals("find")) {
-                int counter = 1;
-                System.out.println("Here are the matching tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    String temp = tasks.get(i).toString();
-                    if (temp.contains(second)) {
-                        System.out.println(counter + "." + temp);
-                        counter++;
-                    }
-                }
             } else {
                 String[] input3 = second.split("/", 2);
                 String task = input3[0].trim();
