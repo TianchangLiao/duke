@@ -67,12 +67,6 @@ public class Duke {
                 tasks.get(temp).markAsDone();
                 System.out.println("Nice! I've marked this task as done:\n"
                         + tasks.get(temp).toString());
-            } else if (first.equals("delete")) {
-                int temp = Integer.parseInt(second) - 1;
-                System.out.println("Noted. I've removed this task:\n"
-                        + tasks.get(temp).toString() + "\nNow you have " + (tasks.size() - 1)
-                        + " in the list.");
-                tasks.remove(temp);
             } else if (first.equals("find")) {
                 int counter = 1;
                 System.out.println("Here are the matching tasks in your list:");
