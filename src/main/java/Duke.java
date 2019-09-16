@@ -73,6 +73,7 @@ public class Duke {
                         + tasks.get(temp).toString() + "\nNow you have " + (tasks.size() - 1)
                         + " in the list.");
                 tasks.remove(temp);
+                
             } else {
                 String[] input3 = second.split("/", 2);
                 String task = input3[0].trim();
